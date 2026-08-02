@@ -1,0 +1,51 @@
+name: Bug report
+description: Report a reproducible problem in a Visionary project.
+title: "bug: "
+labels: []
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for reporting a problem. Remove credentials, tokens, personal data, and sensitive logs before submitting.
+  - type: textarea
+    id: outcome
+    attributes:
+      label: What happened?
+      description: Describe the actual behavior and the result you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      description: Give the smallest reliable sequence that reproduces the problem.
+      placeholder: |
+        1. Open...
+        2. Select...
+        3. Observe...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      description: Provide the app version, branch, or commit when known.
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: List relevant operating system, device, runtime, or browser details.
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Sanitized evidence
+      description: Add safe logs, screenshots, or error messages. Never include secrets.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checks
+      options:
+        - label: I searched existing issues and pull requests.
+          required: true
+        - label: I removed credentials, tokens, personal data, and sensitive logs.
+          required: true

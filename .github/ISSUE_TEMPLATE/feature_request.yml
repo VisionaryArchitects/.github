@@ -1,0 +1,34 @@
+name: Feature request
+description: Propose a focused improvement to a Visionary project.
+title: "feature: "
+labels: []
+assignees: []
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Describe the user problem or missed opportunity.
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: Explain what success should look like without prescribing unnecessary implementation details.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add relevant examples, constraints, screenshots, or alternatives.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checks
+      options:
+        - label: I searched existing issues and pull requests for this request.
+          required: true
+        - label: I removed credentials, private data, and sensitive system details.
+          required: true
