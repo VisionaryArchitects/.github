@@ -1,34 +1,49 @@
 name: Feature request
-description: Propose a focused improvement to a Visionary project.
-title: "feature: "
-labels: []
-assignees: []
+description: Propose a focused product or engineering improvement.
+title: "[Feature]: "
 body:
-  - type: textarea
-    id: problem
+  - type: input
+    id: repository
     attributes:
-      label: Problem to solve
-      description: Describe the user problem or missed opportunity.
+      label: Repository or product
+      description: Name the intended repository or product surface.
     validations:
       required: true
   - type: textarea
     id: outcome
     attributes:
       label: Desired outcome
-      description: Explain what success should look like without prescribing unnecessary implementation details.
+      description: Describe the user or operator outcome rather than only an implementation.
     validations:
       required: true
   - type: textarea
-    id: context
+    id: problem
     attributes:
-      label: Additional context
-      description: Add relevant examples, constraints, screenshots, or alternatives.
+      label: Problem or opportunity
+      description: Explain the current limitation and who it affects.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance evidence
+      description: State how the finished work can be proven.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints and risks
+      description: Note compatibility, privacy, security, rollout, or operational boundaries.
   - type: checkboxes
     id: checks
     attributes:
-      label: Submission checks
+      label: Requester checks
       options:
-        - label: I searched existing issues and pull requests for this request.
+        - label: I searched existing issues and pull requests for similar work.
           required: true
-        - label: I removed credentials, private data, and sensitive system details.
+        - label: I did not include credentials, private data, or sensitive infrastructure details.
           required: true
