@@ -25,8 +25,6 @@ REQUIRED = (
     ".github/workflows/governance-ci.yml",
 )
 
-TEXT_SUFFIXES = {".md", ".py", ".yml", ".yaml"}
-TEXT_NAMES = {"CODEOWNERS"}
 SECRET_PATTERNS = {
     "GitHub token": re.compile("gh" + r"[opsu]_[A-Za-z0-9_]{20,}"),
     "GitHub fine-grained token": re.compile("github" + r"_pat_[A-Za-z0-9_]{20,}"),
@@ -34,7 +32,10 @@ SECRET_PATTERNS = {
     "private key": re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"),
     "bearer credential": re.compile(r"Authorization:\s*Bearer\s+\S+", re.IGNORECASE),
 }
-LOCAL_PATH = re.compile(r"(?i)\b[A-Z]:[\\/](?:Users|DEV_PROJECTS)[\\/]")
+WINDOWS_LOCAL_PATH = re.compile(
+    r"(?i)(?:^|[\s`'\"(])(?:[A-Z]:[\\/]|\\\\[^\\/\s]+[\\/][^\\/\s]+)"
+)
+UNIX_LOCAL_PATH = re.compile(r"(?:^|[\s`'\"(])/(?:Users|home|tmp)/")
 PINNED_ACTION = re.compile(r"^\s*uses:\s*[^./\s]+/[^@\s]+@([0-9a-f]{40})(?:\s*#.*)?$")
 CONFLICT_MARKERS = ("<" * 7, "=" * 7, ">" * 7)
 
@@ -51,20 +52,22 @@ def main() -> int:
             fail(f"missing required file: {relative}", failures)
 
     for path in sorted(ROOT.rglob("*")):
-        if (
-            not path.is_file()
-            or ".git" in path.parts
-            or (path.suffix.lower() not in TEXT_SUFFIXES and path.name not in TEXT_NAMES)
-        ):
+        if not path.is_file() or ".git" in path.parts:
             continue
         relative = path.relative_to(ROOT).as_posix()
-        text = path.read_text(encoding="utf-8")
+        if path.stat().st_size > 1_048_576:
+            fail(f"file exceeds bounded public-data scan size: {relative}", failures)
+            continue
+        try:
+            text = path.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            continue
         if any(marker in text for marker in CONFLICT_MARKERS):
             fail(f"merge-conflict marker: {relative}", failures)
         for number, line in enumerate(text.splitlines(), start=1):
             if line.endswith((" ", "\t")):
                 fail(f"trailing whitespace: {relative}:{number}", failures)
-        if LOCAL_PATH.search(text):
+        if WINDOWS_LOCAL_PATH.search(text) or UNIX_LOCAL_PATH.search(text):
             fail(f"machine-local absolute path: {relative}", failures)
         for label, pattern in SECRET_PATTERNS.items():
             if pattern.search(text):
