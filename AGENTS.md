@@ -1,6 +1,6 @@
 # Visionary GitHub Defaults Contract
 
-- Follow `D:\DEV_PROJECTS\AGENTS.md` when working from the Visionary workstation.
+- Follow the broader Visionary workspace contract when operating from a managed workstation.
 - Keep this repository public and free of credentials, internal hostnames, private infrastructure details, personal data, and runtime state.
 - Files here must remain generic enough to apply across the entire Visionary portfolio.
 - Repository-specific contribution or security requirements belong in that repository and override these defaults.

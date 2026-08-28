@@ -1,28 +1,26 @@
 ## Outcome
 
-<!-- What does this change accomplish? -->
+Describe the user or operator outcome this change delivers.
 
-## Why
+## Scope
 
-<!-- Why is this needed now? Link an issue when one exists. -->
+- What changed:
+- What intentionally did not change:
 
-## Changes
+## Verification
 
-- <!-- Add one focused change per bullet. -->
+- [ ] I ran the smallest relevant validation and recorded the command and result below.
+- [ ] I reviewed the diff for credentials, private data, generated output, and unrelated changes.
+- [ ] I documented meaningful risk and a rollback path.
+- [ ] Failing or incomplete work remains a draft pull request.
 
-## Validation
-
-<!-- List exact commands and results. -->
-
-- [ ] Relevant tests or checks pass.
-- [ ] Documentation and user-visible claims match the implementation.
+```text
+Command:
+Result:
+```
 
 ## Risk and rollback
 
-<!-- Describe meaningful risk and how to undo the change. -->
+Risk:
 
-## Safety checklist
-
-- [ ] No credentials, tokens, private keys, session data, or sensitive logs were committed.
-- [ ] Unrelated dirty work was preserved.
-- [ ] The pull request remains draft if required validation is failing or incomplete.
+Rollback:

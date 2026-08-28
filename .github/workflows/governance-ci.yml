@@ -1,0 +1,35 @@
+name: Governance CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: governance-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate governance files
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - name: Validate YAML syntax
+        shell: ruby {0}
+        run: |
+          require "yaml"
+          files = Dir.glob("**/*.{yml,yaml}", File::FNM_DOTMATCH)
+          files.each { |path| YAML.safe_load_file(path, aliases: true) }
+          puts "Validated #{files.length} YAML files."
+      - name: Validate governance policy
+        run: python scripts/validate_governance.py

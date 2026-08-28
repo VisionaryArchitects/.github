@@ -1,51 +1,63 @@
 name: Bug report
-description: Report a reproducible problem in a Visionary project.
-title: "bug: "
-labels: []
-assignees: []
+description: Report a reproducible problem with a Visionary project.
+title: "[Bug]: "
 body:
   - type: markdown
     attributes:
-      value: Thanks for reporting a problem. Remove credentials, tokens, personal data, and sensitive logs before submitting.
-  - type: textarea
-    id: outcome
+      value: >-
+        Do not include credentials, tokens, private keys, personal data, private
+        infrastructure details, or sensitive logs. Security vulnerabilities must
+        use the private reporting path in SECURITY.md.
+  - type: input
+    id: repository
     attributes:
-      label: What happened?
-      description: Describe the actual behavior and the result you expected.
+      label: Repository or product
+      description: Name the affected repository or product surface.
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Current behavior
+      description: Explain what happened, including a bounded and sanitized error summary.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: Explain what should have happened.
     validations:
       required: true
   - type: textarea
     id: reproduce
     attributes:
       label: Reproduction steps
-      description: Give the smallest reliable sequence that reproduces the problem.
+      description: Provide the smallest safe sequence that reproduces the problem.
       placeholder: |
-        1. Open...
-        2. Select...
-        3. Observe...
+        1. ...
+        2. ...
+        3. ...
     validations:
       required: true
-  - type: input
-    id: version
-    attributes:
-      label: Version or commit
-      description: Provide the app version, branch, or commit when known.
   - type: textarea
     id: environment
     attributes:
       label: Environment
-      description: List relevant operating system, device, runtime, or browser details.
+      description: Include relevant versions and platform details without private paths or secrets.
   - type: textarea
     id: evidence
     attributes:
       label: Sanitized evidence
-      description: Add safe logs, screenshots, or error messages. Never include secrets.
+      description: Add bounded logs, screenshots, test output, or request IDs after removing sensitive material.
   - type: checkboxes
     id: checks
     attributes:
-      label: Submission checks
+      label: Reporter checks
       options:
-        - label: I searched existing issues and pull requests.
+        - label: I searched existing issues and pull requests for this problem.
           required: true
-        - label: I removed credentials, tokens, personal data, and sensitive logs.
+        - label: I removed credentials, private data, and sensitive infrastructure details.
+          required: true
+        - label: This is not a security vulnerability requiring private disclosure.
           required: true
