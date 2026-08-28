@@ -26,7 +26,7 @@ REQUIRED = (
 )
 
 SECRET_PATTERNS = {
-    "GitHub token": re.compile("gh" + r"[opsu]_[A-Za-z0-9_]{20,}"),
+    "GitHub token": re.compile("gh" + r"[oprsu]_[A-Za-z0-9_]{20,}"),
     "GitHub fine-grained token": re.compile("github" + r"_pat_[A-Za-z0-9_]{20,}"),
     "AWS access key": re.compile("AK" + r"IA[0-9A-Z]{16}"),
     "private key": re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"),
@@ -36,7 +36,10 @@ WINDOWS_LOCAL_PATH = re.compile(
     r"(?i)(?:^|[\s`'\"(])(?:[A-Z]:[\\/]|\\\\[^\\/\s]+[\\/][^\\/\s]+)"
 )
 UNIX_LOCAL_PATH = re.compile(r"(?:^|[\s`'\"(])/(?:Users|home|tmp)/")
-PINNED_ACTION = re.compile(r"^\s*uses:\s*[^./\s]+/[^@\s]+@([0-9a-f]{40})(?:\s*#.*)?$")
+ACTION_REFERENCE = re.compile(r"^\s*(?:-\s*)?uses:")
+PINNED_ACTION = re.compile(
+    r"^\s*(?:-\s*)?uses:\s*[^./\s]+/[^@\s]+@([0-9a-f]{40})(?:\s*#.*)?$"
+)
 CONFLICT_MARKERS = ("<" * 7, "=" * 7, ">" * 7)
 
 
@@ -74,11 +77,11 @@ def main() -> int:
                 fail(f"possible {label}: {relative}", failures)
 
     workflows = ROOT / ".github" / "workflows"
-    for path in sorted(workflows.glob("*.y*ml")):
-        for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
-            stripped = line.strip()
-            if stripped.startswith("uses:") and not PINNED_ACTION.match(line):
-                fail(f"action is not pinned to a full commit SHA: {path.name}:{number}", failures)
+    if workflows.exists():
+        for path in sorted(workflows.glob("*.y*ml")):
+            for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+                if ACTION_REFERENCE.match(line) and not PINNED_ACTION.match(line):
+                    fail(f"action is not pinned to a full commit SHA: {path.name}:{number}", failures)
 
     if failures:
         print("Governance validation failed:", file=sys.stderr)
